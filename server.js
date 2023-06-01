@@ -27,4 +27,4 @@ io.on('connection', socket => {
     })
 })
 
-server.listen(3000)
+server.listen(https://dynamic-pony-e43db9.netlify.app)
