@@ -20,7 +20,7 @@
     </form>
 
     <script type="text/javascript">
-        let socket = io('http://localhost:3000')
+        let socket = io('https://dynamic-pony-e43db9.netlify.app')
 
         function renderMessage(message){
             $('.messages').append('<div class="message"><strong>'+ message.author +'</strong>: '+ message.message +'</div>')
