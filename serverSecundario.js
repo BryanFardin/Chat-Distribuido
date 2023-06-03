@@ -1,8 +1,13 @@
+// Servidor Secundario
+
 const express = require('express');
 const path = require('path');
+const socketIO = require('socket.io-client');
+
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
+const masterSocket = socketIO('http://localhost:3000');
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'public'));
@@ -16,34 +21,30 @@ app.use('/', (req, res) => {
 let messages = [];
 
 io.on('connection', (socket) => {
-  console.log(`Socket conectado: ${socket.id}`);
+  console.log(`Socket connected: ${socket.id}`);
 
   socket.emit('previousMessages', messages);
 
   socket.on('sendMessage', (data) => {
     messages.push(data);
-    socket.broadcast.emit('receivedMessage', data);
-    // Emitir a mensagem para o namespace do servidor mestre
-    io.of('/').emit('receivedMessage', data);
+    socket.broadcast.emit('receivedMessage', data); // Transmite a mensagem para os clientes conectados ao servidor escravo
+  });
+});
+
+masterSocket.on('connect', () => {
+  console.log('Connected to master server');
+});
+
+masterSocket.on('disconnect', () => {
+  console.log('Master server disconnected');
+  // Tomar medidas para assumir o controle do chat, por exemplo, mudar a lógica de envio de mensagens
+  masterSocket.close()
+  server.close()
+  server.listen(3000, () => {
+    console.log('Slave server running on port 3000');
   });
 });
 
 server.listen(3001, () => {
-  console.log('Servidor Slave iniciado na porta 3001');
-});
-
-// Conectar ao servidor mestre
-const socket = require('socket.io-client')('http://localhost:3000');
-
-socket.on('connect', () => {
-  console.log('Conectado ao servidor mestre');
-
-  // Detectar desconexão do servidor mestre
-  socket.on('disconnect', () => {
-    console.log('Desconectado do servidor mestre');
-    // Assumir o controle do chat
-    server.listen(3000, () => {
-      console.log('Servidor Slave assumiu o controle na porta 3000');
-    });
-  });
+  console.log('Slave server running on port 3001');
 });
