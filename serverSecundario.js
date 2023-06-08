@@ -18,12 +18,17 @@ app.use('/', (req, res) => {
   res.render('index.html');
 });
 
+let serverStart = false
 let messages = [];
 
 io.on('connection', (socket) => {
   console.log(`Socket connected: ${socket.id}`);
 
-  socket.emit('previousMessages', messages);
+  if (serverStart === false) {
+    socket.emit('previousMessages', messages);
+  } else {
+    console.log('Server Starting')
+  } 
 
   socket.on('sendMessage', (data) => {
     messages.push(data);
@@ -33,6 +38,9 @@ io.on('connection', (socket) => {
 
 masterSocket.on('connect', () => {
   console.log('Connected to master server');
+  masterSocket.on('receivedMessage', (data) => {
+    messages.push(data);
+  });
 });
 
 masterSocket.on('disconnect', () => {
@@ -42,6 +50,12 @@ masterSocket.on('disconnect', () => {
   server.close()
   server.listen(3000, () => {
     console.log('Slave server running on port 3000');
+    serverStart = true
+
+    setTimeout(function() {
+      serverStart = false
+    }, 5000);
+
   });
 });
 
