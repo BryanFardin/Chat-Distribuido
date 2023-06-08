@@ -20,7 +20,7 @@
     </form>
 
     <script type="text/javascript">
-        let socket = io('https://chatdistribuidosnb.netlify.app/')
+        let socket = io('https://first-api-liard.vercel.app')
 
         function renderMessage(message){
             $('.messages').append('<div class="message"><strong>'+ message.author +'</strong>: '+ message.message +'</div>')
