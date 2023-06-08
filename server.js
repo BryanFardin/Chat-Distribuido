@@ -27,4 +27,4 @@ io.on('connection', socket => {
     })
 })
 
-server.listen(chatdistribuidosnb.netlify.app)
+server.listen(https://chatdistribuidosnb.netlify.app/)
