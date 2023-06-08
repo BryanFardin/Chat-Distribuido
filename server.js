@@ -27,4 +27,4 @@ io.on('connection', socket => {
     })
 })
 
-server.listen('https://chatdistribuidosnb.netlify.app/')
+server.listen('https://first-api-liard.vercel.app')
