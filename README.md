@@ -20,7 +20,7 @@ O Chat teve seu deploy feito atravez da Vercel e esta disponivel para teste atra
 
 - **Linguagem de Programação:** Javascript
   
-- **Framework Web:** Node, WebScoket.io, Express
+- **Frameworks:** Node, WebScoket.io, Express
 ## Como Executar
 
 1. **Pré-requisitos:**
